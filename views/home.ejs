@@ -1,0 +1,155 @@
+<%- include('partials/header', { title: 'Home' }) %>
+
+<!-- Hero -->
+<section class="hero-section">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-6">
+        <div class="hero-tag">🔥 New Arrivals 2026</div>
+        <div class = "founder"> Made by Anurag Pandey</div>
+        <h1 class="hero-title">
+          Discover<br>
+          <span class="accent">Premium</span><br>
+          Products
+        </h1>
+        <p class="hero-desc">Shop the latest trends in electronics, fashion, and footwear. Quality you can trust, prices you'll love.</p>
+        <div>
+          <a href="/shop" class="btn-hero">Shop Now →</a>
+          <a href="#categories" class="btn-hero-outline">Browse Categories</a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat-item">
+            <div class="num">4+</div>
+            <div class="label">Products</div>
+          </div>
+          <div class="stat-item">
+            <div class="num">3</div>
+            <div class="label">Categories</div>
+          </div>
+          <div class="stat-item">
+            <div class="num">Free</div>
+            <div class="label">Returns</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="hero-img-wrap">
+          <div class="hero-float-badge badge-1">🔥 Up to 30% Off</div>
+          <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=600&q=80" alt="Shopping" />
+          <div class="hero-float-badge badge-2">⭐ 4.8/5 Rating</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Categories -->
+<section class="py-5" id="categories">
+  <div class="container">
+    <div class="section-tag">Browse By</div>
+    <h2 class="section-title">Categories</h2>
+    <p class="section-subtitle">Find exactly what you're looking for</p>
+    <div class="row g-3">
+      <% categories.forEach(cat => { %>
+      <div class="col-lg-4 col-md-4 col-6">
+        <a href="/shop?category=<%= cat.name %>" class="category-card">
+          <span class="cat-icon"><%= cat.icon %></span>
+          <div class="cat-name"><%= cat.name %></div>
+          <div class="cat-count"><%= cat.count %> product<%= cat.count !== 1 ? 's' : '' %></div>
+        </a>
+      </div>
+      <% }) %>
+    </div>
+  </div>
+</section>
+
+<!-- Featured Products -->
+<section class="py-5 bg-white">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-end mb-4 flex-wrap gap-3">
+      <div>
+        <div class="section-tag">Handpicked</div>
+        <h2 class="section-title mb-0">Featured Products</h2>
+      </div>
+      <a href="/shop" style="font-family:'Syne',sans-serif; font-weight:700; color:var(--primary); text-decoration:none; font-size:0.9rem;">
+        View All →
+      </a>
+    </div>
+    <div class="row g-4">
+      <% products.forEach(product => { %>
+      <div class="col-lg-3 col-md-6">
+        <div class="product-card">
+          <div class="product-img-wrap">
+            <img src="<%= product.image %>" alt="<%= product.name %>" loading="lazy">
+            <span class="product-badge <%= product.badge.toLowerCase() %>"><%= product.badge %></span>
+            <a href="/product/<%= product.id %>" class="quick-view-btn">Quick View</a>
+          </div>
+          <div class="product-info">
+            <div class="product-category"><%= product.category %></div>
+            <a href="/product/<%= product.id %>" class="product-name"><%= product.name %></a>
+            <div class="product-stars">
+              ★★★★<%= product.rating >= 4.5 ? '★' : '☆' %>
+              <span>(<%= product.reviews %> reviews)</span>
+            </div>
+            <div class="product-price-row">
+              <span class="price-current">₹<%= product.price.toLocaleString('en-IN') %></span>
+              <span class="price-original">₹<%= product.originalPrice.toLocaleString('en-IN') %></span>
+              <span class="price-discount">-<%= Math.round((product.originalPrice - product.price) / product.originalPrice * 100) %>%</span>
+            </div>
+            <button class="btn-add-cart" data-id="<%= product.id %>">Add to Cart 🛒</button>
+          </div>
+        </div>
+      </div>
+      <% }) %>
+    </div>
+  </div>
+</section>
+
+<!-- Promo Banner -->
+<section class="py-5">
+  <div class="container">
+    <div class="promo-banner">
+      <div class="row align-items-center">
+        <div class="col-lg-8">
+          <div class="promo-tag">Limited Time Offer</div>
+          <h3 class="promo-title">Get Free Delivery on Orders Over ₹999!</h3>
+          <p class="promo-desc">Shop from our wide range of products and enjoy free shipping right to your door.</p>
+          <a href="/shop" class="btn-promo">Shop Now →</a>
+        </div>
+        <div class="col-lg-4 text-end d-none d-lg-block">
+          <span style="font-size: 7rem;">🚚</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features Strip -->
+<section class="py-4 bg-white border-top border-bottom">
+  <div class="container">
+    <div class="row g-3 text-center">
+      <div class="col-6 col-md-3">
+        <div style="font-size:1.8rem">🚚</div>
+        <div style="font-family:'Syne',sans-serif; font-weight:700; font-size:0.9rem; margin-top:6px">Free Delivery</div>
+        <div style="font-size:0.8rem; color:var(--gray)">Orders above ₹999</div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div style="font-size:1.8rem">🔄</div>
+        <div style="font-family:'Syne',sans-serif; font-weight:700; font-size:0.9rem; margin-top:6px">Easy Returns</div>
+        <div style="font-size:0.8rem; color:var(--gray)">7-day return policy</div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div style="font-size:1.8rem">🔒</div>
+        <div style="font-family:'Syne',sans-serif; font-weight:700; font-size:0.9rem; margin-top:6px">Secure Payment</div>
+        <div style="font-size:0.8rem; color:var(--gray)">100% safe checkout</div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div style="font-size:1.8rem">💬</div>
+        <div style="font-family:'Syne',sans-serif; font-weight:700; font-size:0.9rem; margin-top:6px">24/7 Support</div>
+        <div style="font-size:0.8rem; color:var(--gray)">Always here to help</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/footer') %>
