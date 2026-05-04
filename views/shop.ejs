@@ -15,20 +15,99 @@
 <section class="py-5">
   <div class="container">
 
-    <!-- Filter Pills -->
-    <div class="filter-pills">
+    <!-- Category Pills -->
+    <div class="filter-pills mb-2">
       <a href="/shop" class="filter-pill <%= !selectedCategory ? 'active' : '' %>">All</a>
       <a href="/shop?category=Electronics" class="filter-pill <%= selectedCategory === 'Electronics' ? 'active' : '' %>">💻 Electronics</a>
-      <a href="/shop?category=Clothing" class="filter-pill <%= selectedCategory === 'Clothing' ? 'active' : '' %>">👕 Clothing</a>
-      <a href="/shop?category=Footwear" class="filter-pill <%= selectedCategory === 'Footwear' ? 'active' : '' %>">👟 Footwear</a>
+      <a href="/shop?category=Clothing"    class="filter-pill <%= selectedCategory === 'Clothing'    ? 'active' : '' %>">👕 Clothing</a>
+      <a href="/shop?category=Footwear"    class="filter-pill <%= selectedCategory === 'Footwear'    ? 'active' : '' %>">👟 Footwear</a>
     </div>
+
+    <!-- Advanced Filters Bar -->
+    <form method="GET" action="/shop" id="filterForm" class="filter-bar-advanced mb-4">
+      <% if (selectedCategory) { %>
+        <input type="hidden" name="category" value="<%= selectedCategory %>">
+      <% } %>
+
+      <div class="filter-row">
+        <!-- Brand Filter -->
+        <div class="filter-group">
+          <label class="filter-label">🏷️ Brand</label>
+          <select name="brand" class="filter-select" onchange="document.getElementById('filterForm').submit()">
+            <option value="">All Brands</option>
+            <% availableBrands.forEach(b => { %>
+              <option value="<%= b %>" <%= selectedBrand === b ? 'selected' : '' %>><%= b %></option>
+            <% }) %>
+          </select>
+        </div>
+
+        <!-- Sort -->
+        <div class="filter-group">
+          <label class="filter-label">⬆️ Sort By</label>
+          <select name="sort" class="filter-select" onchange="document.getElementById('filterForm').submit()">
+            <option value="">Relevance</option>
+            <option value="price_asc"  <%= selectedSort === 'price_asc'  ? 'selected' : '' %>>Price: Low to High</option>
+            <option value="price_desc" <%= selectedSort === 'price_desc' ? 'selected' : '' %>>Price: High to Low</option>
+            <option value="rating"     <%= selectedSort === 'rating'     ? 'selected' : '' %>>Top Rated</option>
+            <option value="newest"     <%= selectedSort === 'newest'     ? 'selected' : '' %>>Newest First</option>
+          </select>
+        </div>
+
+        <!-- Badge / Deal Filter -->
+        <div class="filter-group">
+          <label class="filter-label">🔥 Deals</label>
+          <select name="badge" class="filter-select" onchange="document.getElementById('filterForm').submit()">
+            <option value="">All</option>
+            <option value="hot"      <%= selectedBadge === 'hot'      ? 'selected' : '' %>>🔥 Hot</option>
+            <option value="sale"     <%= selectedBadge === 'sale'     ? 'selected' : '' %>>💰 Sale</option>
+            <option value="new"      <%= selectedBadge === 'new'      ? 'selected' : '' %>>✨ New</option>
+            <option value="trending" <%= selectedBadge === 'trending' ? 'selected' : '' %>>📈 Trending</option>
+          </select>
+        </div>
+
+        <!-- Price Range -->
+        <div class="filter-group filter-group-price">
+          <label class="filter-label">💵 Price Range (₹)</label>
+          <div class="price-inputs">
+            <input type="number" name="minPrice" placeholder="Min" value="<%= selectedMinPrice %>" class="filter-input-price" min="0">
+            <span class="price-sep">—</span>
+            <input type="number" name="maxPrice" placeholder="Max" value="<%= selectedMaxPrice %>" class="filter-input-price" min="0">
+            <button type="submit" class="btn-apply-filter">Apply</button>
+          </div>
+        </div>
+
+        <!-- Reset -->
+        <% if (selectedCategory || selectedBrand || selectedMinPrice || selectedMaxPrice || selectedSort || selectedBadge) { %>
+        <div class="filter-group filter-group-reset">
+          <label class="filter-label">&nbsp;</label>
+          <a href="/shop<%= selectedCategory ? '?category=' + selectedCategory : '' %>" class="btn-reset-filter">✕ Reset Filters</a>
+        </div>
+        <% } %>
+      </div>
+    </form>
+
+    <!-- Active Filter Tags -->
+    <% if (selectedBrand || selectedMinPrice || selectedMaxPrice || selectedBadge) { %>
+    <div class="active-filters mb-3">
+      <span class="active-filters-label">Active:</span>
+      <% if (selectedBrand) { %>
+        <span class="active-tag">🏷️ <%= selectedBrand %></span>
+      <% } %>
+      <% if (selectedBadge) { %>
+        <span class="active-tag">🔥 <%= selectedBadge.charAt(0).toUpperCase() + selectedBadge.slice(1) %></span>
+      <% } %>
+      <% if (selectedMinPrice || selectedMaxPrice) { %>
+        <span class="active-tag">💵 ₹<%= selectedMinPrice || '0' %> – ₹<%= selectedMaxPrice || '∞' %></span>
+      <% } %>
+    </div>
+    <% } %>
 
     <!-- Products Grid -->
     <% if (products.length === 0) { %>
     <div class="empty-state">
       <span class="empty-icon">🔍</span>
       <h3 class="empty-title">No products found</h3>
-      <p style="color:var(--gray); margin-bottom:20px">Try a different category</p>
+      <p style="color:var(--gray); margin-bottom:20px">Try adjusting your filters</p>
       <a href="/shop" style="background:var(--primary); color:white; padding:10px 28px; border-radius:50px; text-decoration:none; font-family:'Syne',sans-serif; font-weight:700;">View All</a>
     </div>
     <% } else { %>
@@ -42,7 +121,7 @@
             <a href="/product/<%= product.id %>" class="quick-view-btn">View Details</a>
           </div>
           <div class="product-info">
-            <div class="product-category"><%= product.category %></div>
+            <div class="product-category"><%= product.category %> • <span style="color:var(--primary);font-weight:700"><%= product.brand %></span></div>
             <a href="/product/<%= product.id %>" class="product-name"><%= product.name %></a>
             <div class="product-stars">
               ★★★★<%= product.rating >= 4.5 ? '★' : '☆' %>
