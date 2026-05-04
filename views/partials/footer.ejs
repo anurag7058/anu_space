@@ -28,6 +28,41 @@
         <p style="font-size:0.88rem;">📍 Noida, India</p>
       </div>
     </div>
+
+    <!-- Query Form Row -->
+    <div class="row mt-4">
+      <div class="col-12">
+        <div class="footer-query-box">
+          <h6>Send Us a Query</h6>
+          <p class="footer-query-sub">Have a question or feedback? Drop us a message and we'll get back to you.</p>
+
+          <% if (locals.querySuccess) { %>
+            <div class="footer-query-success">
+              <span class="footer-success-icon">✓</span>
+              <span>Thanks! We'll get back to you soon.</span>
+            </div>
+          <% } else { %>
+            <form action="/query" method="POST" class="footer-query-form">
+              <div class="footer-query-row">
+                <div class="footer-query-field">
+                  <input type="text" name="name" class="footer-input" placeholder="Your Name" required />
+                </div>
+                <div class="footer-query-field">
+                  <input type="email" name="email" class="footer-input" placeholder="Your Email" required />
+                </div>
+              </div>
+              <div class="footer-query-field">
+                <textarea name="message" class="footer-input footer-textarea" placeholder="Write your query here..." rows="3" required></textarea>
+              </div>
+              <button type="submit" class="footer-query-btn">
+                Send Message <span class="footer-btn-arrow">→</span>
+              </button>
+            </form>
+          <% } %>
+
+        </div>
+      </div>
+    </div>
     <div class="footer-bottom">
       © 2026 MyShop. Built with ❤️ using Node.js &amp; Express.
     </div>
